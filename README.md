@@ -2,7 +2,7 @@
 
 > Pipeline de classification en **PySpark / MLlib** sur le jeu **IEEE-CIS (Kaggle)** : ~590k transactions, **3.5%** de fraudes, fort déséquilibre, variables anonymisées + identité partielle.
 
-![Dashboard Superset (aperçu)](docs/superset_hero.png)
+
 
 ---
 
