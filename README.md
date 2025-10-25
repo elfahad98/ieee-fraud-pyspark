@@ -1,6 +1,8 @@
 # Détection de fraude bancaire (PySpark)
 
-> Pipeline de classification en **PySpark / MLlib** sur le jeu **IEEE-CIS (Kaggle)** : ~590k transactions, **3.5%** de fraudes, fort déséquilibre, variables anonymisées + identité partielle.
+> Pipeline de classification en **PySpark / MLlib** sur le jeu **IEEE-CIS (Kaggle)** :
+> ~590 k transactions, **≈ 400 variables** (anonymisées + identité partielle),
+> **3.5 %** de fraudes, fort déséquilibre de classes.
 
 
 
