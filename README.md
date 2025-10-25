@@ -10,11 +10,14 @@
 
 ##  Objectif
 Construire un pipeline **distribué** et **reproductible** pour prédire `isFraud` à partir de centaines de variables hétérogènes, avec :
-- nettoyage & *feature engineering* guidés par l’EDA,
-- gestion du déséquilibre,
-- benchmark **Logistic Regression / RandomForest / GBT**,
-- **optimisation** (features + hyperparamètres + **seuil**),
-- EDA & suivi via **Apache Superset**.
+- fusion et préparation des données (`train_transaction` + `train_identity`)  
+- nettoyage ciblé et imputation des valeurs manquantes  
+- *feature engineering* guidé par l’EDA (~400 variables analysées)  
+- gestion du déséquilibre de classes (pondération)  
+- benchmark : **Logistic Regression**, **Random Forest**, **GBT**  
+- optimisation : tuning d’hyperparamètres & ajustement du seuil  
+- visualisation et suivi exploratoire via **Apache Superset**
+
 
 ---
 
