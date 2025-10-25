@@ -9,7 +9,7 @@
 ---
 
 ##  Objectif
-Construire un pipeline **distribué** et **reproductible** pour prédire `isFraud` à partir de centaines de variables hétérogènes, avec :
+Construire un pipeline **distribué** et **reproductible** pour prédire `isFraud` à partir d’environ **400 variables hétérogènes**, avec :
 - fusion et préparation des données (`train_transaction` + `train_identity`)  
 - nettoyage ciblé et imputation des valeurs manquantes  
 - *feature engineering* guidé par l’EDA (~400 variables analysées)  
