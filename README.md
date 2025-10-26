@@ -30,7 +30,6 @@ Construire un pipeline **distribué** et **reproductible** pour prédire `isFrau
 
 ##  Données
 Compétition **IEEE-CIS Fraud Detection** (Kaggle).  
-Les fichiers ne sont **pas** versionnés : placez‐les dans `data/` (ignoré par git).
 - `train_transaction.csv`
 - `train_identity.csv`
 
