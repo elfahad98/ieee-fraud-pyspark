@@ -12,7 +12,7 @@
 Construire un pipeline **distribué** et **reproductible** pour prédire `isFraud` à partir d’environ **400 variables hétérogènes**, avec :
 - fusion et préparation des données (`train_transaction` + `train_identity`)  
 - nettoyage ciblé et imputation des valeurs manquantes  
-- *feature engineering* guidé par l’EDA (~400 variables analysées)  
+- *feature engineering* guidé par l’EDA 
 - gestion du déséquilibre de classes (pondération)  
 - benchmark : **Logistic Regression**, **Random Forest**, **GBT**  
 - optimisation : tuning d’hyperparamètres & ajustement du seuil  
