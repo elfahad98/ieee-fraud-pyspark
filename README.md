@@ -23,7 +23,7 @@ Construire un pipeline **distribué** et **reproductible** pour prédire `isFrau
 
 ##  Stack
 - **Spark / PySpark (MLlib)** pour le data prep & les modèles  
-- **Python** : pandas, numpy, scikit-learn (tests stats), matplotlib/seaborn  
+- **Python** : pandas, numpy, scipy (tests statistiques), matplotlib/seaborn
 - **Superset** pour le tableau de bord EDA/monitoring
 
 ---
