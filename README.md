@@ -1,78 +1,61 @@
 # Détection de fraude bancaire (PySpark)
 
-> Pipeline de classification en **PySpark / MLlib** sur le jeu **IEEE-CIS (Kaggle)** :
-> ~590 k transactions, **≈ 400 variables** (anonymisées + identité partielle),
-> **3.5 %** de fraudes, fort déséquilibre de classes.
-
-
+> Pipeline de classification **PySpark / MLlib** sur le jeu **IEEE-CIS (Kaggle)** :  
+> **590 540** transactions, **≈ 434 colonnes après fusion** (`transaction` + `identity`), **3,5 %** de fraudes, variables largement **anonymisées** et identité partielle. :contentReference[oaicite:0]{index=0}
 
 ---
 
-##  Objectif
-Construire un pipeline **distribué** et **reproductible** pour prédire `isFraud` à partir d’environ **400 variables hétérogènes**, avec :
-- fusion et préparation des données (`train_transaction` + `train_identity`)  
-- nettoyage ciblé et imputation des valeurs manquantes  
-- *feature engineering* guidé par l’EDA 
-- gestion du déséquilibre de classes (pondération)  
-- benchmark : **Logistic Regression**, **Random Forest**, **GBT**  
-- optimisation : tuning d’hyperparamètres & ajustement du seuil  
-- visualisation et suivi exploratoire via **Apache Superset**
-
-
----
-
-##  Stack
-- **Spark / PySpark (MLlib)** pour le data prep & les modèles  
-- **Python** : pandas, numpy, scipy (tests statistiques), matplotlib/seaborn
-- **Superset** pour le tableau de bord EDA
+## 🎯 Objectif & périmètre
+Construire un pipeline distribué et **reproductible** pour prédire `isFraud` à partir d’un **grand nombre de variables disponibles (~400)**, en **ciblant uniquement** un **sous-ensemble informatif** identifié par l’EDA et par la **sélection de variables** (importances GBT par familles/id/`Vxx` + filtre `Vxx` > 0,01). :contentReference[oaicite:1]{index=1}  
+Concrètement :
+- **Fusion** `train_transaction` + `train_identity` (LEFT JOIN sur `TransactionID`). :contentReference[oaicite:2]{index=2}  
+- **Nettoyage ciblé** : retrait colonnes > 90 % NaN, création d’indicateurs `has_X` (80–90 % manquants), **imputation** (médiane num, `"unknown"` cat). :contentReference[oaicite:3]{index=3}  
+- **Feature engineering guidé par l’EDA** : dérivées (`log1p_TransactionAmt`, `C1/D1`, `day`, `is_weekend`), **flags métier** (`is_product_C`, `is_credit_card`, `is_discover_card`, `card4_card6`, `is_recent_activity`, `is_recent_intense`, etc.). :contentReference[oaicite:4]{index=4}  
+- **Encodage** : `StringIndexer` + `OneHotEncoder` (faible cardinalité), **frequency encoding** pour email-domains, assemblage `VectorAssembler`, scaling si utile. :contentReference[oaicite:5]{index=5}  
+- **Déséquilibre** (3,5 % fraude) géré par **pondération des classes** (`weightCol`). :contentReference[oaicite:6]{index=6}  
+- **Modèles** benchmark : Logistic Regression, Random Forest, **GBT**. :contentReference[oaicite:7]{index=7}  
+- **Optimisation** : sélection de variables, **tuning** (`maxDepth`, `maxIter`) sur sous-échantillon 40 %, **calibrage du seuil** de décision. :contentReference[oaicite:8]{index=8}
 
 ---
 
-##  Données
-Compétition **IEEE-CIS Fraud Detection** (Kaggle).  
-- `train_transaction.csv`
-- `train_identity.csv`
+## ⚙️ Stack
+- **Spark / PySpark (MLlib)** : préparation, pipeline, modèles  
+- **Python** : pandas, numpy, **scipy** (tests stats : Mann-Whitney, χ²), matplotlib/seaborn  
+- **Superset** : EDA & visualisation (captures dans `docs/`)  
+- *(Optionnel)* **scikit-learn** : modèle proxy pour **SHAP** (interprétabilité). :contentReference[oaicite:9]{index=9}
 
 ---
 
-##  Pipeline (vue rapide)
-
-1. **Fusion** `transaction ⟷ identity` (LEFT JOIN par `TransactionID`)  
-2. **Nettoyage**
-   - retrait des colonnes >90% manquants  
-   - création d’indicateurs `has_X` (80–90% manquants)  
-   - imputation : **médiane** (num), `"unknown"` (cat)
-3. **Feature engineering**
-   - dérivées : `log1p_TransactionAmt`, `C1_over_D1`, `day`, `is_weekend`…
-   - flags métier : `is_product_C`, `is_credit_card`, `is_discover_card`, `is_high_amount`, `is_recent_activity`…
-   - catégorielles : `StringIndexer` + `OneHotEncoder` (faible cardinalité) ; **frequency encoding** pour domaines email
-   - assemblage : `VectorAssembler` (+ `StandardScaler` quand utile)
-4. **Split** 80/20 (seed=42)  
-5. **Déséquilibre** : **pondération de classes** via `weightCol`
-6. **Modèles** : LR / RF / **GBT**  
-7. **Sélection & tuning** : importances GBT, sous-échantillonnage pour grid restreinte (`maxDepth`, `maxIter`), **calibrage du seuil**  
-8. **Évaluation** : ROC-AUC, PR-AUC, F1, Precision/Recall + courbes ROC & PR
+## 🧱 Pipeline (très synthétique)
+1) Fusion & typage → 2) Nettoyage (NaN, `has_X`, imputation) →  
+3) EDA avancée (cible vs `TransactionAmt`, `D1`, `C1`, `ProductCD`, `card4`, `card6`, etc.) → 4) FE (ratios/flags/temps) →  
+5) Encodage & assemblage → 6) Split 80/20 (seed=42), **pondération** → 7) Benchmark → 8) Sélection + tuning + **seuil**. :contentReference[oaicite:10]{index=10}
 
 ---
 
-##  Résultats (validation)
+## 🔢 Résultats finaux (validation)
+**Modèle retenu** : `GBTClassifier` (**maxDepth=10**, **maxIter=100**, **seuil=0.8**).  
+**Validation** : **ROC-AUC = 0.9543**, **F1 = 0.6948**, **Precision = 0.7194**, **Recall = 0.6718**. :contentReference[oaicite:11]{index=11}
 
-| Modèle | ROC-AUC | PR-AUC | F1 | Precision | Recall |
-|---|---:|---:|---:|---:|---:|
-| Logistic Regression | 0.872 | — | 0.18 | 0.10 | 0.84 |
-| Random Forest | 0.855 | — | 0.17 | 0.10 | 0.81 |
-| **GBT (final)** | **0.954** | **0.74** | **0.69** | **0.72** | **0.67** |
-
-**Choix final : GBT** (`maxDepth=10`, `maxIter=100`, **seuil=0.8**) — bon compromis *precision/recall* après ajout de features « anti-FP » et calibration du seuil.
-
-> Détails et tableaux complets dans le rapport (`/rapports/…pdf`).  
+> Le gain vient de : **features ciblant les faux positifs**, sélection de variables, **tuning** + **calibration du seuil** (précision ~14 % → ~72 %). :contentReference[oaicite:12]{index=12}
 
 ---
 
-##  Prise en main
-
-### 0) Cloner
-
+## 🚀 Reproduire
+```bash
+# 0) Cloner
 git clone https://github.com/elfahad98/ieee-fraud-pyspark.git
 cd ieee-fraud-pyspark
 
+# 1) Environnement (ex. venv)
+python -m venv .venv && source .venv/bin/activate   # (Windows: .venv\Scripts\activate)
+pip install -r requirements.txt
+
+# 2) Données (non versionnées)
+# Déposer depuis Kaggle :
+# data/train_transaction.csv
+# data/train_identity.csv
+
+# 3) Lancer
+# - Notebook principal : notebooks/fraud_detection_modeling1.ipynb
+# - ou script (si fourni plus tard) : python scripts/train_gbt.py --data_dir data
