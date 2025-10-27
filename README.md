@@ -1,7 +1,7 @@
 # Détection de fraude bancaire (PySpark)
 
 > Pipeline de classification **PySpark / MLlib** sur **IEEE-CIS (Kaggle)** :  
-> ~590k transactions, **≈ 400+ variables disponibles** après fusion (`transaction` + `identity`),  
+> ~590 k transactions, **≈ 400 variables disponibles** après fusion (`transaction` + `identity`),  
 > **3,5 %** de fraudes (déséquilibre marqué), variables largement anonymisées.
 
 <!-- Optionnel : ajoute la capture si tu la poses dans docs/ -->
@@ -14,7 +14,7 @@
 Construire un pipeline **distribué** et **reproductible** pour prédire `isFraud` sur un jeu de données
 large et hétérogène, **sans analyser exhaustivement chaque variable** : l’EDA sert à **cibler un
 sous-ensemble de variables réellement informatives**, puis on optimise le modèle (sélection,
-tuning **manuel** et **calibration du seuil**) en tenant compte du **déséquilibre (≈ 3,5 %)**.
+tuning **manuel** et **calibration du seuil**) en tenant compte du **déséquilibre (~3,5 %)**.
 
 ---
 
@@ -71,13 +71,15 @@ Les fichiers **ne sont pas versionnés** (licence) :
 - `train_transaction.csv`
 - `train_identity.csv`
 
+> Placez les données dans `./data/` (répertoire ignoré par git).
+
 ---
 
 ##  Résultats (validation)
 
-| Modèle               | ROC-AUC | PR-AUC | F1   | Précision | Rappel |
-|----------------------|:------:|:-----:|:----:|:--------:|:------:|
-| **GBT (optimisé)**      | **0.954** | **0.74** | **0.69** | **0.72** | **0.67** |
+| Modèle            | ROC-AUC | PR-AUC | F1   | Précision | Rappel |
+|-------------------|:------:|:-----:|:----:|:--------:|:------:|
+| **GBT (optimisé)**| **0.954** | **0.74** | **0.69** | **0.72** | **0.67** |
 
 **Modèle retenu** : `GBTClassifier` (**maxDepth = 10**, **maxIter = 100**, **seuil = 0.8**).  
 Le gain vient des **features ciblant les faux positifs**, de la **sélection de variables**, du **tuning**
@@ -85,7 +87,7 @@ et de la **calibration du seuil**.
 
 ---
 
-## Prise en main
+##  Prise en main
 
 ```bash
 # 0) Cloner
@@ -98,7 +100,6 @@ python -m venv .venv
 source .venv/bin/activate
 # Windows
 # .venv\Scripts\activate
-
 pip install -r requirements.txt
 
 # 2) Données (non versionnées) : déposer dans ./data/
