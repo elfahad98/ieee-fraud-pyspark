@@ -67,7 +67,7 @@ tuning **manuel** et **calibration du seuil**) en tenant compte du **déséquili
 ##  Données
 
 Compétition **IEEE-CIS Fraud Detection** (Kaggle).  
-Les fichiers **ne sont pas versionnés** (licence) : placez-les dans `data/` (ignoré par git) :
+Les fichiers **ne sont pas versionnés** (licence) :
 - `train_transaction.csv`
 - `train_identity.csv`
 
