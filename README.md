@@ -5,7 +5,7 @@
 
 ---
 
-## 🎯 Objectif & périmètre
+##  Objectif & périmètre
 Construire un pipeline distribué et **reproductible** pour prédire `isFraud` à partir d’un **grand nombre de variables disponibles (~400)**, en **ciblant uniquement** un **sous-ensemble informatif** identifié par l’EDA et par la **sélection de variables** (importances GBT par familles/id/`Vxx` + filtre `Vxx` > 0,01). :contentReference[oaicite:1]{index=1}  
 Concrètement :
 - **Fusion** `train_transaction` + `train_identity` (LEFT JOIN sur `TransactionID`). :contentReference[oaicite:2]{index=2}  
