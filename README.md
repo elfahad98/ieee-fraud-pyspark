@@ -18,7 +18,7 @@ tuning **manuel** et **calibration du seuil**) en tenant compte du **déséquili
 
 ---
 
-## 🧭 Méthodologie (6 étapes)
+##  Méthodologie (6 étapes)
 
 1) **Prétraitement initial**  
    - Chargement `train_transaction` et `train_identity`  
