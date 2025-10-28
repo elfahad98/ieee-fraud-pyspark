@@ -109,3 +109,16 @@ pip install -r requirements.txt
 # 3) Lancer
 # - Notebook principal :
 #   notebooks/fraud_detection_modeling1.ipynb
+
+---
+
+## 👤 Auteur
+
+Projet réalisé par **COMBO El-Fahad** – Université de Caen (2024).  
+Contact : `el-fahad.combo@etu.unicaen.fr`
+
+---
+
+## 📄 Licence
+
+Ce projet est sous licence **MIT**. Voir le fichier `LICENSE`.
