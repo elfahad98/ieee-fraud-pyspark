@@ -109,6 +109,7 @@ pip install -r requirements.txt
 # 3) Lancer
 # - Notebook principal :
 #   notebooks/fraud_detection_modeling1.ipynb
+```
 
 ---
 
