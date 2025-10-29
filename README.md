@@ -91,7 +91,7 @@ Réglages efficaces : **features ciblées**, **sélection**, **tuning**, **calib
 
 | Figure | Commentaire rapide |
 |:--|:--|
-| ![PR curves](screenshots/optirapp.png) | **Précision–Rappel (val.)** : PR-AUC ≈ **0.737** → le modèle sépare bien les fraudes malgré un fort déséquilibre. |
+| ![PR curves](screenshots/optirapp.png) | **Précision–Rappel (val.)** : **PR-AUC ≈ 0,737** (*prévalence ≈ 3,5 %*) — bonne séparation malgré le fort déséquilibre. |
 | ![Threshold](screenshots/Validation__GBT__threshold_curves.png) | **Courbes Precision/Recall/F1 vs seuil** : pic **F1=0.692** au **seuil=0.845** → compromis adopté. |
 | ![Confusion](screenshots/Validation__GBT__confusion_matrix_t0.84.png) | **Matrice (val., t≈0.845)** : **TP=2 646**, **FP=743**, **FN=1 610**, **TN=113 109** → erreurs surtout côté rappel. |
 | ![Gain](screenshots/Validation__GBT__cumulative_gain.png) | **Gain cumulatif** : en priorisant ~les meilleurs scores, une petite part de la population capte la majorité des fraudes. |
