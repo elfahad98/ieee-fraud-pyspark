@@ -79,9 +79,9 @@ Les fichiers **ne sont pas versionnés** (licence) :
 
 | Modèle            | ROC-AUC | PR-AUC | F1   | Précision | Rappel |
 |-------------------|:------:|:-----:|:----:|:--------:|:------:|
-| **GBT (optimisé)**| **0.954** | **0.74** | **0.69** | **0.72–0.78** | **0.62–0.67** |
+| **GBT (optimisé)**| **0.954** | **0.74** | **0.69** | **0.72** | **0.67** |
 
-**Modèle retenu** : `GBTClassifier` (**maxDepth=10**, **maxIter=100**, **seuil≈0.84–0.85**).  
+**Modèle retenu** : `GBTClassifier` (**maxDepth=10**, **maxIter=100**, **seuil=0.8**).  
 Le gain vient des **features anti-FP**, de la **sélection**, du **tuning** et de la **calibration du seuil**.
 
 ---
