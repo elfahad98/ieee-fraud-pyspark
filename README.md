@@ -90,12 +90,12 @@ Le gain vient des **features anti-FP**, de la **sélection**, du **tuning** et d
 
 | Figure | Commentaire rapide |
 |:--|:--|
-| ![PR curves](docs/screenshots/optirapp.png) | **Précision–Rappel (val.)** : courbe bien au-dessus de la ligne de base → le modèle distingue réellement les fraudes (PR-AUC ≈ **0.74**). |
-| ![Threshold](docs/screenshots/Validation__GBT__threshold_curves.png) | **Choix du seuil** : pic **F1 ≈ 0.69** vers **0.84–0.85** → **précision ~0.72–0.78**, **rappel ~0.62–0.67** selon la tolérance aux FP. |
-| ![Confusion](docs/screenshots/Validation__GBT__confusion_matrix_t0.84.png) | **Matrice (val., seuil 0.84)** : **TP=2 646**, **FP=743**, **FN=1 610**, **TN=113 109** → quelques fraudes manquées (FN) à pondérer selon le **coût** métier. |
-| ![Gain](docs/screenshots/Validation__GBT__cumulative_gain.png) | **Gain cumulatif** : une **petite fraction** de la population (≲10 %) capture la **grande majorité** des fraudes → idéal pour un contrôle ciblé. |
-| ![Calibration](docs/screenshots/Validation__GBT__calibration_curve.png) | **Calibration** : sous-calibré (courbe sous la diagonale) → à corriger si les **probabilités** sont utilisées en prod. |
-| ![SHAP](docs/screenshots/shap.png) | **Interprétabilité (SHAP, échantillon)** : `TransactionAmt`, `card1`, `log1p_D15`, `C13`, `V257` en tête → signaux cohérents et actionnables. |
+| ![PR curves](screenshots/optirapp.png) | **Précision–Rappel (val.)** : courbe bien au-dessus de la ligne de base → le modèle distingue réellement les fraudes (PR-AUC ≈ **0.74**). |
+| ![Threshold](screenshots/Validation__GBT__threshold_curves.png) | **Choix du seuil** : pic **F1 ≈ 0.69** vers **0.84–0.85** → **précision ~0.72–0.78**, **rappel ~0.62–0.67** selon la tolérance aux FP. |
+| ![Confusion](screenshots/Validation__GBT__confusion_matrix_t0.84.png) | **Matrice (val., seuil 0.84)** : **TP=2 646**, **FP=743**, **FN=1 610**, **TN=113 109** → quelques fraudes manquées (FN) à pondérer selon le **coût** métier. |
+| ![Gain](screenshots/Validation__GBT__cumulative_gain.png) | **Gain cumulatif** : une **petite fraction** de la population (≲10 %) capture la **grande majorité** des fraudes → idéal pour un contrôle ciblé. |
+| ![Calibration](screenshots/Validation__GBT__calibration_curve.png) | **Calibration** : sous-calibré (courbe sous la diagonale) → à corriger si les **probabilités** sont utilisées en prod. |
+| ![SHAP](screenshots/shap.png) | **Interprétabilité (SHAP, échantillon)** : `TransactionAmt`, `card1`, `log1p_D15`, `C13`, `V257` en tête → signaux cohérents et actionnables. |
 
 ### Pistes d’amélioration
 - **Calibration** (isotonic / Platt) sur un set dédié, puis rééval sur un **hold-out**.
