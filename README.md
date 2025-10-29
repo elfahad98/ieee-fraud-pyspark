@@ -77,12 +77,13 @@ Les fichiers **ne sont pas versionnés** (licence) :
 
 ## Résultats (validation)
 
-| Modèle            | ROC-AUC | PR-AUC | F1   | Précision | Rappel |
-|-------------------|:------:|:-----:|:----:|:--------:|:------:|
-| **GBT (optimisé)**| **0.954** | **0.74** | **0.69** | **0.72** | **0.67** |
+| Modèle            | ROC-AUC | PR-AUC | F1    | Précision | Rappel |
+|-------------------|:------:|:-----:|:-----:|:--------:|:------:|
+| **GBT (optimisé)**| **0.954** | **0.74** | **0.692** | **0.78** | **0.64** |
 
-**Modèle retenu** : `GBTClassifier` (**maxDepth=10**, **maxIter=100**, **seuil=0.8**).  
-Le gain vient des **features anti-FP**, de la **sélection**, du **tuning** et de la **calibration du seuil**.
+**Modèle retenu** : `GBTClassifier` (**maxDepth=10**, **maxIter=100**, **seuil=0.845**).  
+Réglages efficaces : **features ciblées**, **sélection**, **tuning**, **calibration du seuil**.
+
 
 ---
 
@@ -90,12 +91,13 @@ Le gain vient des **features anti-FP**, de la **sélection**, du **tuning** et d
 
 | Figure | Commentaire rapide |
 |:--|:--|
-| ![PR curves](screenshots/optirapp.png) | **Précision–Rappel (val.)** : courbe bien au-dessus de la ligne de base → le modèle distingue réellement les fraudes (PR-AUC ≈ **0.74**). |
-| ![Threshold](screenshots/Validation__GBT__threshold_curves.png) | **Choix du seuil** : pic **F1 ≈ 0.69** vers **0.84–0.85** → **précision ~0.72–0.78**, **rappel ~0.62–0.67** selon la tolérance aux FP. |
-| ![Confusion](screenshots/Validation__GBT__confusion_matrix_t0.84.png) | **Matrice (val., seuil 0.84)** : **TP=2 646**, **FP=743**, **FN=1 610**, **TN=113 109** → quelques fraudes manquées (FN) à pondérer selon le **coût** métier. |
-| ![Gain](screenshots/Validation__GBT__cumulative_gain.png) | **Gain cumulatif** : une **petite fraction** de la population (≲10 %) capture la **grande majorité** des fraudes → idéal pour un contrôle ciblé. |
-| ![Calibration](screenshots/Validation__GBT__calibration_curve.png) | **Calibration** : sous-calibré (courbe sous la diagonale) → à corriger si les **probabilités** sont utilisées en prod. |
-| ![SHAP](screenshots/shap.png) | **Interprétabilité (SHAP, échantillon)** : `TransactionAmt`, `card1`, `log1p_D15`, `C13`, `V257` en tête → signaux cohérents et actionnables. |
+| ![PR curves](screenshots/optirapp.png) | **Précision–Rappel (val.)** : PR-AUC ≈ **0.737** → le modèle sépare bien les fraudes malgré un fort déséquilibre. |
+| ![Threshold](screenshots/Validation__GBT__threshold_curves.png) | **Courbes Precision/Recall/F1 vs seuil** : pic **F1=0.692** au **seuil=0.845** → compromis adopté. |
+| ![Confusion](screenshots/Validation__GBT__confusion_matrix_t0.84.png) | **Matrice (val., t≈0.845)** : **TP=2 646**, **FP=743**, **FN=1 610**, **TN=113 109** → erreurs surtout côté rappel. |
+| ![Gain](screenshots/Validation__GBT__cumulative_gain.png) | **Gain cumulatif** : en priorisant ~les meilleurs scores, une petite part de la population capte la majorité des fraudes. |
+| ![Calibration](screenshots/Validation__GBT__calibration_curve.png) | **Calibration** : légère **sur-confiance** en milieu de gamme (courbe sous la diagonale) → à corriger si la proba est consommée telle quelle. |
+| ![SHAP](screenshots/shap.png) | **Interprétabilité (SHAP, échantillon)** : `TransactionAmt`, `card1`, `log1p_D15`, `C13`, `V257` ressortent clairement. |
+
 
 ### Pistes d’amélioration
 - **Calibration** (isotonic / Platt) sur un set dédié, puis rééval sur un **hold-out**.
