@@ -92,7 +92,7 @@ et de la **calibration du seuil**.
 | Figure | Commentaire rapide |
 |:--|:--|
 | ![PR curves](screenshots/optirapp.png) | **Précision–Rappel (val.)** : courbe nettement au-dessus de 0 → le modèle capte bien les fraudes malgré le déséquilibre (PR-AUC ≈ **0.74**). |
-| ![ROC curves](screenshots/optiROC.png) | **ROC train vs val.** : AUC train ≈ **0.99**, val. ≈ **0.95**. Léger écart → un peu d’overfit mais la généralisation reste solide (loin d’un modèle aléatoire). |
+| ![ROC curves](screenshots/optiROC.png) | **ROC train vs val.** : AUC train ≈ **0.98**, val. ≈ **0.95**. Léger écart → un peu d’overfit mais la généralisation reste solide (loin d’un modèle aléatoire). |
 | ![Threshold](screenshots/Validation__GBT__threshold_curves.png) | **Choix du seuil** : pic **F1 ≈ 0.69** vers **0.84–0.85** → à ce seuil, **précision ~0.78**, **rappel ~0.62** (bon compromis pour limiter les faux positifs). |
 | ![Confusion](screenshots/Validation__GBT__confusion_matrix_t0.84.png) | **Matrice (val., seuil 0.84)** : **TP=2 646**, **FP=743**, **FN=1 610**, **TN=113 109** → erreurs concentrées côté rappel (coût FN à surveiller). |
 | ![Gain](screenshots/Validation__GBT__cumulative_gain.png) | **Gain cumulatif** : en scorant par ordre décroissant, une petite fraction de la population capture la majorité des fraudes → très bon pour des contrôles ciblés. |
