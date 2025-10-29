@@ -81,8 +81,6 @@ Les fichiers **ne sont pas versionnés** (licence) :
 |-------------------|:------:|:-----:|:----:|:--------:|:------:|
 | **GBT (optimisé)**| **0.954** | **0.74** | **0.69** | **0.72–0.78** | **0.62–0.67** |
 
-**TL;DR.** Modèle bien au-dessus du hasard (PR-AUC 0.74), bon compromis **précision/rappel** autour d’un seuil ~**0.84–0.85**.
-
 **Modèle retenu** : `GBTClassifier` (**maxDepth=10**, **maxIter=100**, **seuil≈0.84–0.85**).  
 Le gain vient des **features anti-FP**, de la **sélection**, du **tuning** et de la **calibration du seuil**.
 
