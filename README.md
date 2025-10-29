@@ -101,12 +101,9 @@ Réglages efficaces : **features ciblées**, **sélection**, **tuning**, **calib
 
 ### Pistes d’amélioration
 - **Calibration** (isotonic / Platt) sur un set dédié, puis rééval sur un **hold-out**.
-- **Seuils dépendants du coût** (FP vs FN) et/ou **seuils par segment** (device, pays, canal).
-- **Ré-échantillonnage/pondération** (ajuster `weightCol`, downsample des non-fraudes).
 - **Validation temporelle** (split par date) pour mieux gérer la dérive.
 - **Features** robustes (fenêtres temporelles, ratios stables, encodages fréquence).
 - **Suivi prod** : PR-AUC, PR@k, drift des features/labels, ré-entraînement périodique.
-
 
 
 ---
