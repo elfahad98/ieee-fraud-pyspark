@@ -87,6 +87,35 @@ et de la **calibration du seuil**.
 
 ---
 
+## Visualisations clés
+
+| Figure | Commentaire rapide |
+|:--|:--|
+| ![PR curves](docs/screenshots/optirapp.png) | **Précision–Rappel (val.)** : courbe nettement au-dessus de 0 → le modèle capte bien les fraudes malgré le déséquilibre (PR-AUC ≈ **0.74**). |
+| ![ROC curves](docs/screenshots/optiROC.png) | **ROC train vs val.** : AUC train ≈ **0.99**, val. ≈ **0.95**. Léger écart → un peu d’overfit mais la généralisation reste solide (loin d’un modèle aléatoire). |
+| ![Threshold](docs/screenshots/Validation__GBT__threshold_curves.png) | **Choix du seuil** : pic **F1 ≈ 0.69** vers **0.84–0.85** → à ce seuil, **précision ~0.78**, **rappel ~0.62** (bon compromis pour limiter les faux positifs). |
+| ![Confusion](docs/screenshots/Validation__GBT__confusion_matrix_t0.84.png) | **Matrice (val., seuil 0.84)** : **TP=2 646**, **FP=743**, **FN=1 610**, **TN=113 109** → erreurs concentrées côté rappel (coût FN à surveiller). |
+| ![Gain](docs/screenshots/Validation__GBT__cumulative_gain.png) | **Gain cumulatif** : en scorant par ordre décroissant, une petite fraction de la population capture la majorité des fraudes → très bon pour des contrôles ciblés. |
+| ![Calibration](docs/screenshots/Validation__GBT__calibration_curve.png) | **Calibration** : sous-calibré en milieu de gamme (les proba sont trop faibles vs réalité) et bon près de 0.9 → ok pour du **classement**, à corriger si on **consomme** la proba. |
+| ![SHAP](docs/screenshots/shap.png) | **Interprétabilité (SHAP, échantillon)** : influence forte de `TransactionAmt`, `card1`, `log1p_D15`, `C13`, `V257`, etc. → cohérent et exploitable pour l’analyse métier. |
+
+### Bilan rapide
+- Le modèle **n’est pas aléatoire** (PR-AUC **0.74**, ROC-AUC **0.95** en validation).  
+- Seuil opérationnel retenu ≈ **0.84–0.85** → **F1 ~0.69**, **Precision ~0.78**, **Recall ~0.62**.  
+- Léger **overfit** mais accepté pour un premier jet. Calibration **perfectible**.
+
+### Pistes d’amélioration
+- **Calibration des probabilités** si elles sont utilisées côté produit : *isotonic* ou *Platt scaling* sur un jeu de calibration (puis évaluation sur un jeu tenu-out).
+- **Seuils dépendants du coût** (matrice coût FP/FN) ou **seuils par segment** (ex. canal, pays, device).
+- **Ré-échantillonnage / pondération** : ajuster `weightCol`, downsample des non-fraudes, ou entraînement par mini-batches pondérés.
+- **Validation temporelle** (split par date) pour mieux estimer la dérive et éviter la fuite d’info.
+- **Features** supplémentaires/robustes : fenêtres temporelles (fréquence d’achats), ratios, encodages fréquence stables.
+- **Surveillance en prod** : suivi PR-AUC/PR@k, drift des features/labels, ré-entraînement périodique.
+
+
+---
+
+
 ##  Prise en main
 
 ```bash
