@@ -75,15 +75,16 @@ Les fichiers **ne sont pas versionnés** (licence) :
 
 ---
 
-##  Résultats (validation)
+## Résultats (validation)
 
 | Modèle            | ROC-AUC | PR-AUC | F1   | Précision | Rappel |
 |-------------------|:------:|:-----:|:----:|:--------:|:------:|
-| **GBT (optimisé)**| **0.954** | **0.74** | **0.69** | **0.72** | **0.67** |
+| **GBT (optimisé)**| **0.954** | **0.74** | **0.69** | **0.72–0.78** | **0.62–0.67** |
 
-**Modèle retenu** : `GBTClassifier` (**maxDepth = 10**, **maxIter = 100**, **seuil = 0.8**).  
-Le gain vient des **features ciblant les faux positifs**, de la **sélection de variables**, du **tuning**
-et de la **calibration du seuil**.
+**TL;DR.** Modèle bien au-dessus du hasard (PR-AUC 0.74), bon compromis **précision/rappel** autour d’un seuil ~**0.84–0.85**.
+
+**Modèle retenu** : `GBTClassifier` (**maxDepth=10**, **maxIter=100**, **seuil≈0.84–0.85**).  
+Le gain vient des **features anti-FP**, de la **sélection**, du **tuning** et de la **calibration du seuil**.
 
 ---
 
@@ -91,25 +92,21 @@ et de la **calibration du seuil**.
 
 | Figure | Commentaire rapide |
 |:--|:--|
-| ![PR curves](screenshots/optirapp.png) | **Précision–Rappel (val.)** : courbe nettement au-dessus de 0 → le modèle capte bien les fraudes malgré le déséquilibre (PR-AUC ≈ **0.74**). |
-| ![ROC curves](screenshots/optiROC.png) | **ROC train vs val.** : AUC train ≈ **0.98**, val. ≈ **0.95**. Léger écart → un peu d’overfit mais la généralisation reste solide (loin d’un modèle aléatoire). |
-| ![Threshold](screenshots/Validation__GBT__threshold_curves.png) | **Choix du seuil** : pic **F1 ≈ 0.69** vers **0.84–0.85** → à ce seuil, **précision ~0.72**, **rappel ~0.67** (bon compromis pour limiter les faux positifs). |
-| ![Confusion](screenshots/Validation__GBT__confusion_matrix_t0.84.png) | **Matrice (val., seuil 0.84)** : **TP=2 646**, **FP=743**, **FN=1 610**, **TN=113 109** → erreurs concentrées côté rappel (coût FN à surveiller). |
-| ![Gain](screenshots/Validation__GBT__cumulative_gain.png) | **Gain cumulatif** : en scorant par ordre décroissant, une petite fraction de la population capture la majorité des fraudes → très bon pour des contrôles ciblés. |
-| ![SHAP](screenshots/shap.png) | **Interprétabilité (SHAP, échantillon)** : influence forte de `TransactionAmt`, `card1`, `log1p_D15`, `C13`, `V257`, etc. → cohérent et exploitable pour l’analyse métier. |
-
-### Bilan rapide
-- Le modèle **n’est pas aléatoire** (PR-AUC **0.74**, ROC-AUC **0.95** en validation).  
-- Seuil opérationnel retenu ≈ **0.84–0.85** → **F1 ~0.69**, **Precision ~0.78**, **Recall ~0.62**.  
-- Léger **overfit** mais accepté pour un premier jet. Calibration **perfectible**.
+| ![PR curves](docs/screenshots/optirapp.png) | **Précision–Rappel (val.)** : courbe bien au-dessus de la ligne de base → le modèle distingue réellement les fraudes (PR-AUC ≈ **0.74**). |
+| ![Threshold](docs/screenshots/Validation__GBT__threshold_curves.png) | **Choix du seuil** : pic **F1 ≈ 0.69** vers **0.84–0.85** → **précision ~0.72–0.78**, **rappel ~0.62–0.67** selon la tolérance aux FP. |
+| ![Confusion](docs/screenshots/Validation__GBT__confusion_matrix_t0.84.png) | **Matrice (val., seuil 0.84)** : **TP=2 646**, **FP=743**, **FN=1 610**, **TN=113 109** → quelques fraudes manquées (FN) à pondérer selon le **coût** métier. |
+| ![Gain](docs/screenshots/Validation__GBT__cumulative_gain.png) | **Gain cumulatif** : une **petite fraction** de la population (≲10 %) capture la **grande majorité** des fraudes → idéal pour un contrôle ciblé. |
+| ![Calibration](docs/screenshots/Validation__GBT__calibration_curve.png) | **Calibration** : sous-calibré (courbe sous la diagonale) → à corriger si les **probabilités** sont utilisées en prod. |
+| ![SHAP](docs/screenshots/shap.png) | **Interprétabilité (SHAP, échantillon)** : `TransactionAmt`, `card1`, `log1p_D15`, `C13`, `V257` en tête → signaux cohérents et actionnables. |
 
 ### Pistes d’amélioration
-- **Calibration des probabilités** si elles sont utilisées côté produit : *isotonic* ou *Platt scaling* sur un jeu de calibration (puis évaluation sur un jeu tenu-out).
-- **Seuils dépendants du coût** (matrice coût FP/FN) ou **seuils par segment** (ex. canal, pays, device).
-- **Ré-échantillonnage / pondération** : ajuster `weightCol`, downsample des non-fraudes, ou entraînement par mini-batches pondérés.
-- **Validation temporelle** (split par date) pour mieux estimer la dérive et éviter la fuite d’info.
-- **Features** supplémentaires/robustes : fenêtres temporelles (fréquence d’achats), ratios, encodages fréquence stables.
-- **Surveillance en prod** : suivi PR-AUC/PR@k, drift des features/labels, ré-entraînement périodique.
+- **Calibration** (isotonic / Platt) sur un set dédié, puis rééval sur un **hold-out**.
+- **Seuils dépendants du coût** (FP vs FN) et/ou **seuils par segment** (device, pays, canal).
+- **Ré-échantillonnage/pondération** (ajuster `weightCol`, downsample des non-fraudes).
+- **Validation temporelle** (split par date) pour mieux gérer la dérive.
+- **Features** robustes (fenêtres temporelles, ratios stables, encodages fréquence).
+- **Suivi prod** : PR-AUC, PR@k, drift des features/labels, ré-entraînement périodique.
+
 
 
 ---
