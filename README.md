@@ -1,4 +1,4 @@
-# Détection de fraude bancaire (PySpark)
+# Détection de fraude bancaire — Machine Learning avec (PySpark)
 
 > Pipeline de classification **PySpark / MLlib** sur **IEEE-CIS (Kaggle)** :  
 > ~590 k transactions, **≈ 400 variables disponibles** après fusion (`transaction` + `identity`),  
