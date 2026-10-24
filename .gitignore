@@ -1,0 +1,48 @@
+# Python cache / bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments and local Python tooling
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE / editor local settings
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local environment / secrets
+.env
+.env.*
+!.env.example
+
+# Raw data and generated ML outputs
+data/
+artifacts/
+models/
+Mlflow/
+mlruns/
+
+# Spark / local database outputs
+spark-warehouse/
+metastore_db/
+derby.log
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs and temporary files
+logs/
+*.log
+tmp/
+temp/
